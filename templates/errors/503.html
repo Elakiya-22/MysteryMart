@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}503 — Service Unavailable | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-600 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-secondary" style="font-family:'Outfit', sans-serif;">503</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-secondary text-white fs-6 px-3 py-1 rounded-pill shadow">Maintenance Standby</span>
+      </div>
+    </div>
+    <h1 class="h2 fw-bold text-dark mb-3">Service Temporarily Unavailable</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      MysteryMart is undergoing scheduled server maintenance or high-demand unboxing load balancing. 
+      Please refresh your browser in a few moments. All existing placed orders and dispatches are securely locked in our database.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('main.index') }}" class="btn btn-mm-primary btn-lg">Refresh Homepage</a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('What is error 503?')">Ask Assistant</button>
+      <a href="{{ url_for('main.health_check') }}" class="btn btn-mm-outline btn-lg">Check System Health</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

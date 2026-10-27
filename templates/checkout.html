@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | MysteryMart Delivery &amp; Simulated Payment{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('cart.view_cart') }}">Cart</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+    </ol>
+  </nav>
+
+  <h1 class="h2 fw-bold text-dark mb-4">Complete Your Mystery Order</h1>
+
+  <form action="{{ url_for('checkout.checkout') }}" method="POST" id="checkoutForm" novalidate>
+    <div class="row g-4">
+      <!-- Left Column: Shipping & Payment Form -->
+      <div class="col-lg-7">
+        <!-- 1. Contact Information -->
+        <div class="bg-white rounded-4 border p-4 shadow-sm mb-4">
+          <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-purple rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">1</span>
+            Recipient Information
+          </h5>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="customer_name" class="form-label small fw-bold text-secondary">Full Name <span class="text-danger">*</span></label>
+              <input type="text" name="customer_name" id="customer_name" class="form-control" placeholder="John Doe" value="{{ form_data.customer_name if form_data else (current_user.username if current_user else '') }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="customer_email" class="form-label small fw-bold text-secondary">Email Address <span class="text-danger">*</span></label>
+              <input type="email" name="customer_email" id="customer_email" class="form-control" placeholder="john@example.com" value="{{ form_data.customer_email if form_data else (current_user.email if current_user else '') }}" required>
+              <div class="form-text smaller">We will email your unboxing confirmation and tracking code here.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="customer_phone" class="form-label small fw-bold text-secondary">Phone Number (Optional)</label>
+              <input type="tel" name="customer_phone" id="customer_phone" class="form-control" placeholder="+1 (555) 000-0000" value="{{ form_data.customer_phone if form_data else '' }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Shipping Address & Weather Forecast Integration -->
+        <div class="bg-white rounded-4 border p-4 shadow-sm mb-4">
+          <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-purple rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
+            Delivery Address
+          </h5>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="shipping_address" class="form-label small fw-bold text-secondary">Street Address <span class="text-danger">*</span></label>
+              <input type="text" name="shipping_address" id="shipping_address" class="form-control" placeholder="123 Mystery Lane, Suite 4B" value="{{ form_data.shipping_address if form_data else '' }}" required>
+            </div>
+
+            <div class="col-md-5">
+              <label for="cityInput" class="form-label small fw-bold text-secondary">City <span class="text-danger">*</span></label>
+              <input type="text" name="city" id="cityInput" class="form-control" placeholder="New York" value="{{ form_data.city if form_data else 'New York' }}" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="state" class="form-label small fw-bold text-secondary">State / Province</label>
+              <input type="text" name="state" id="state" class="form-control" placeholder="NY" value="{{ form_data.state if form_data else '' }}">
+            </div>
+
+            <div class="col-md-3">
+              <label for="postal_code" class="form-label small fw-bold text-secondary">Postal Code <span class="text-danger">*</span></label>
+              <input type="text" name="postal_code" id="postal_code" class="form-control" placeholder="10001" value="{{ form_data.postal_code if form_data else '' }}" required>
+            </div>
+
+            <div class="col-12">
+              <label for="delivery_notes" class="form-label small fw-bold text-secondary">Special Delivery Instructions (Optional)</label>
+              <textarea name="delivery_notes" id="delivery_notes" class="form-control" rows="2" placeholder="Leave at front porch, ring doorbell, etc.">{{ form_data.delivery_notes if form_data else '' }}</textarea>
+            </div>
+          </div>
+
+          <!-- Third-Party Weather API Integration Box (Requirement 11) -->
+          <div class="delivery-weather-box mt-4" id="checkoutWeatherBadge">
+            <div class="weather-icon-lg text-primary" id="checkoutWeatherIcon">
+              {{ weather_preview.icon if weather_preview else '☀️' }}
+            </div>
+            <div class="small flex-grow-1" id="checkoutWeatherText">
+              {% if weather_preview and weather_preview.available %}
+                <strong>{{ weather_preview.icon }} {{ weather_preview.city }}:</strong> {{ weather_preview.temperature }}°C, {{ weather_preview.condition }}.
+                <span class="text-success ms-1"><i class="bi bi-shield-check"></i> {{ weather_preview.delivery_impact }}</span>
+              {% else %}
+                <strong>📦 MysteryMart Safe Transit:</strong> All surprise packages are secured in water-resistant packaging.
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Simulated Payment Method -->
+        <div class="bg-white rounded-4 border p-4 shadow-sm mb-4">
+          <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-purple rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">3</span>
+            Payment Simulation (Demonstration Mode)
+          </h5>
+
+          <!-- Security Policy Notice (Requirement 12: Never collect or store raw card details) -->
+          <div class="alert alert-info py-2 px-3 small rounded-3 mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-shield-check fs-5 text-info"></i>
+            <div>
+              <strong>Security Policy:</strong> Real credit card details are never collected or stored. This platform uses a simulated demo payment gateway.
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-2 mb-3">
+            <label class="form-check p-3 rounded-3 border d-flex align-items-center gap-3 cursor-pointer">
+              <input class="form-check-input ms-0 mt-0" type="radio" name="payment_method" value="Simulated Credit Card" checked>
+              <div class="flex-grow-1">
+                <div class="fw-bold text-dark"><i class="bi bi-credit-card me-2 text-purple"></i> Simulated Card (Instant Approval)</div>
+                <div class="smaller text-muted">Test checkout with simulated Visa, MasterCard, or Amex.</div>
+              </div>
+            </label>
+
+            <label class="form-check p-3 rounded-3 border d-flex align-items-center gap-3 cursor-pointer">
+              <input class="form-check-input ms-0 mt-0" type="radio" name="payment_method" value="Simulated Digital Wallet">
+              <div class="flex-grow-1">
+                <div class="fw-bold text-dark"><i class="bi bi-wallet2 me-2 text-orange"></i> Simulated Wallet / UPI</div>
+                <div class="smaller text-muted">Instant simulated digital confirmation.</div>
+              </div>
+            </label>
+
+            <label class="form-check p-3 rounded-3 border d-flex align-items-center gap-3 cursor-pointer">
+              <input class="form-check-input ms-0 mt-0" type="radio" name="payment_method" value="Cash On Delivery">
+              <div class="flex-grow-1">
+                <div class="fw-bold text-dark"><i class="bi bi-cash-stack me-2 text-success"></i> Cash on Delivery</div>
+                <div class="smaller text-muted">Pay in simulated currency upon physical doorstep unboxing.</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Simulated Card Details Dummy Fields -->
+          <div id="simulatedCardDetails" class="p-3 bg-light rounded-3 border">
+            <div class="row g-2">
+              <div class="col-8">
+                <label class="form-label smaller fw-bold text-muted mb-1">Simulated Card Number</label>
+                <input type="text" class="form-control form-control-sm bg-white" placeholder="4242 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242" value="4242 •••• •••• 4242" readonly>
+              </div>
+              <div class="col-2">
+                <label class="form-label smaller fw-bold text-muted mb-1">Expiry</label>
+                <input type="text" class="form-control form-control-sm bg-white" value="12/28" readonly>
+              </div>
+              <div class="col-2">
+                <label class="form-label smaller fw-bold text-muted mb-1">CVC</label>
+                <input type="text" class="form-control form-control-sm bg-white" value="777" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Summary & Confirmation Button -->
+      <div class="col-lg-5">
+        <div class="bg-white rounded-4 border p-4 shadow-sm sticky-top" style="top: 90px;">
+          <h5 class="fw-bold text-dark mb-3">Order Summary</h5>
+
+          <!-- Items Breakdown -->
+          <div class="d-flex flex-column gap-3 mb-4 max-h-300 overflow-y-auto pe-1">
+            {% for item in cart.cart_items %}
+              <div class="d-flex align-items-center justify-content-between gap-3 pb-2 border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="rounded-2 border" style="width: 48px; height: 48px; object-fit: contain;">
+                  <div>
+                    <h6 class="mb-0 small fw-bold">{{ item.product.name }}</h6>
+                    <div class="smaller text-muted">Qty: {{ item.quantity }} &times; ${{ "%.2f"|format(item.unit_price) }}</div>
+                  </div>
+                </div>
+                <div class="fw-bold text-dark small">${{ "%.2f"|format(item.line_total) }}</div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Financial Calculation -->
+          <div class="d-flex justify-content-between mb-2 text-muted small">
+            <span>Boxes Subtotal:</span>
+            <span class="text-dark fw-bold">${{ "%.2f"|format(cart.subtotal) }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-3 text-muted small">
+            <span>Insured Delivery Fee:</span>
+            {% if cart.delivery_fee == 0 %}
+              <span class="text-success fw-bold">FREE</span>
+            {% else %}
+              <span class="text-dark fw-bold">${{ "%.2f"|format(cart.delivery_fee) }}</span>
+            {% endif %}
+          </div>
+
+          <hr>
+
+          <div class="d-flex justify-content-between align-items-baseline mb-4">
+            <span class="fw-bold text-dark">Grand Total:</span>
+            <span class="fs-3 fw-bold text-purple">${{ "%.2f"|format(cart.total_amount) }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-mm-primary btn-lg w-100 py-3 fw-bold mb-3" id="confirmOrderBtn">
+            <i class="bi bi-lock-fill me-1"></i> Confirm &amp; Place Order
+          </button>
+
+          <div class="text-center smaller text-muted">
+            By placing your order, you agree to MysteryMart's unboxing terms and verified value guarantee.
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
+{% endblock %}

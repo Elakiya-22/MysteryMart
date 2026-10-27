@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="goldTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EAB308" />
+    </linearGradient>
+    <linearGradient id="goldLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#CA8A04" />
+      <stop offset="100%" stop-color="#A16207" />
+    </linearGradient>
+    <linearGradient id="goldRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#713F12" />
+      <stop offset="100%" stop-color="#422006" />
+    </linearGradient>
+    <linearGradient id="vipPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#9333EA" />
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#FDE047" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="400" height="320" rx="20" fill="url(#bgGrad6)"/>
+  
+  <!-- Subtle dark luxury particles -->
+  <circle cx="90" cy="80" r="3" fill="#FDE047" opacity="0.8"/>
+  <circle cx="310" cy="90" r="2.5" fill="#FDE047" opacity="0.7"/>
+  <circle cx="70" cy="220" r="2" fill="#FDE047" opacity="0.6"/>
+  <circle cx="330" cy="240" r="3.5" fill="#FDE047" opacity="0.9"/>
+  <ellipse cx="200" cy="275" rx="110" ry="22" fill="#000000" opacity="0.6"/>
+
+  <g filter="url(#goldGlow)">
+    <polygon points="200,90 295,138 200,186 105,138" fill="url(#goldTop)" stroke="#FEF08A" stroke-width="2.5"/>
+    <polygon points="105,138 200,186 200,265 105,217" fill="url(#goldLeft)" />
+    <polygon points="295,138 200,186 200,265 295,217" fill="url(#goldRight)" />
+    
+    <!-- Purple VIP Strap -->
+    <polygon points="188,96 212,84 212,180 188,192" fill="url(#vipPurple)"/>
+    <polygon points="190,191 210,181 210,260 190,270" fill="url(#vipPurple)"/>
+    <polygon points="105,172 200,220 200,232 105,184" fill="#A855F7" opacity="0.9"/>
+  </g>
+
+  <!-- Golden Crown Badge -->
+  <g transform="translate(190, 70)">
+    <circle cx="10" cy="-10" r="28" fill="#1E1B4B" stroke="#FDE047" stroke-width="3" filter="url(#goldGlow)"/>
+    <text x="10" y="2" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="34" fill="#FDE047" text-anchor="middle">👑</text>
+  </g>
+
+  <text x="200" y="300" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="14" fill="#FDE047" text-anchor="middle" letter-spacing="1">PREMIUM VIP SOVEREIGN BOX</text>
+</svg>

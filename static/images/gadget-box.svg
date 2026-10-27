@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5F3FF" />
+      <stop offset="100%" stop-color="#EDE9FE" />
+    </linearGradient>
+    <linearGradient id="boxTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="boxLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6D28D9" />
+      <stop offset="100%" stop-color="#5B21B6" />
+    </linearGradient>
+    <linearGradient id="boxRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4C1D95" />
+      <stop offset="100%" stop-color="#3B0764" />
+    </linearGradient>
+    <linearGradient id="accentOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#4C1D95" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="400" height="320" rx="20" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle decorative circles -->
+  <circle cx="80" cy="60" r="45" fill="#DDD6FE" opacity="0.4"/>
+  <circle cx="340" cy="260" r="60" fill="#FED7AA" opacity="0.4"/>
+  
+  <!-- Ground shadow -->
+  <ellipse cx="200" cy="275" rx="110" ry="22" fill="#C4B5FD" opacity="0.5"/>
+  
+  <!-- Mystery Box Isometric -->
+  <g filter="url(#shadow)">
+    <!-- Top Face -->
+    <polygon points="200,90 295,138 200,186 105,138" fill="url(#boxTop)" stroke="#A78BFA" stroke-width="2"/>
+    <!-- Left Face -->
+    <polygon points="105,138 200,186 200,265 105,217" fill="url(#boxLeft)" />
+    <!-- Right Face -->
+    <polygon points="295,138 200,186 200,265 295,217" fill="url(#boxRight)" />
+    
+    <!-- Orange Ribbon Strap -->
+    <polygon points="188,96 212,84 212,180 188,192" fill="url(#accentOrange)" opacity="0.95"/>
+    <polygon points="142,119 157,111 258,162 243,170" fill="url(#accentOrange)" opacity="0.9"/>
+    <polygon points="190,191 210,181 210,260 190,270" fill="url(#accentOrange)"/>
+    <polygon points="105,172 200,220 200,232 105,184" fill="#F97316" opacity="0.8"/>
+  </g>
+  
+  <!-- Floating Tech Gadget Elements -->
+  <g transform="translate(190, 70)">
+    <!-- Holographic Question Mark -->
+    <circle cx="10" cy="-10" r="28" fill="#FFFFFF" stroke="#EA580C" stroke-width="3" filter="url(#shadow)"/>
+    <text x="10" y="2" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="34" fill="#EA580C" text-anchor="middle">?</text>
+  </g>
+  
+  <!-- Tech Gadget Icon Badges -->
+  <g transform="translate(60, 100)">
+    <circle cx="15" cy="15" r="18" fill="#7C3AED" opacity="0.9"/>
+    <!-- USB / Chip icon -->
+    <rect x="8" y="10" width="14" height="10" rx="2" fill="#FFFFFF"/>
+    <line x1="12" y1="6" x2="12" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+    <line x1="18" y1="6" x2="18" y2="10" stroke="#FFFFFF" stroke-width="2"/>
+  </g>
+  <g transform="translate(310, 120)">
+    <circle cx="15" cy="15" r="18" fill="#EA580C" opacity="0.9"/>
+    <!-- Lightning bolt -->
+    <polygon points="16,6 10,17 15,17 14,24 21,13 16,13" fill="#FFFFFF"/>
+  </g>
+  
+  <text x="200" y="300" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="14" fill="#6B21A8" text-anchor="middle" letter-spacing="1">GADGET MYSTERY BOX</text>
+</svg>

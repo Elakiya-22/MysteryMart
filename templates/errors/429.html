@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}429 — Rate Limit Exceeded | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-600 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-orange" style="font-family:'Outfit', sans-serif;">429</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-warning text-dark fs-6 px-3 py-1 rounded-pill shadow">Cooling Down</span>
+      </div>
+    </div>
+    <h1 class="h2 fw-bold text-dark mb-3">Too Many Requests</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      You have reached our automated rate limit threshold. To prevent bot abuse and ensure fair unboxing access for all shoppers, please wait 30 to 60 seconds before submitting again.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('main.index') }}" class="btn btn-mm-primary btn-lg">Return Home</a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('Why did I trigger rate limit error 429?')">Ask Assistant</button>
+      <a href="{{ url_for('faq.faq_page') }}" class="btn btn-mm-outline btn-lg">Read FAQs</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

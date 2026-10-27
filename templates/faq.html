@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Frequently Asked Questions | MysteryMart SQL Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+    </ol>
+  </nav>
+
+  <!-- Hero Header -->
+  <div class="text-center py-4 max-w-700 mx-auto">
+    <span class="badge bg-purple-subtle text-purple px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Verified SQL Knowledge Base</span>
+    <h1 class="display-6 fw-bold text-dark mb-2">Frequently Asked Questions</h1>
+    <p class="text-muted small">Everything you need to know about our mystery box categories, guaranteed inclusions, delivery timelines, and error codes.</p>
+
+    <!-- Search Box -->
+    <form action="{{ url_for('faq.faq_page') }}" method="GET" class="mt-4 max-w-500 mx-auto position-relative">
+      <div class="input-group">
+        <input type="text" name="q" class="form-control form-control-lg rounded-pill ps-4 pe-5 border-2 border-purple-subtle" placeholder="Search FAQs (e.g. shipping, guaranteed, error 460)..." value="{{ search_query }}">
+        <button class="btn btn-mm-primary rounded-circle position-absolute end-0 top-50 translate-middle-y me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; z-index: 5;" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Category Filter Pills -->
+  <div class="d-flex flex-wrap justify-content-center gap-2 my-4">
+    <a href="{{ url_for('faq.faq_page') }}" class="btn btn-sm rounded-pill px-3 py-2 {% if selected_category == 'All' and not search_query %}btn-mm-primary{% else %}btn-outline-secondary{% endif %}">
+      All FAQs ({{ faqs|length }})
+    </a>
+    {% for cat in categories %}
+      <a href="{{ url_for('faq.faq_page', category=cat) }}" class="btn btn-sm rounded-pill px-3 py-2 {% if selected_category == cat %}btn-mm-primary{% else %}btn-outline-secondary{% endif %}">
+        {{ cat }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- FAQ Accordion List -->
+  <div class="max-w-800 mx-auto mb-5">
+    {% if faqs %}
+      <div class="accordion shadow-sm rounded-4 overflow-hidden border" id="mysteryFaqAccordion">
+        {% for faq in faqs %}
+          <div class="accordion-item border-0 border-bottom">
+            <h2 class="accordion-header" id="heading{{ faq.id }}">
+              <button class="accordion-button collapsed py-3 fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ faq.id }}" aria-expanded="false" aria-controls="collapse{{ faq.id }}">
+                <span class="badge bg-purple-subtle text-purple me-2 smaller" style="font-size: 0.75rem;">{{ faq.category }}</span>
+                {{ faq.question }}
+              </button>
+            </h2>
+            <div id="collapse{{ faq.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ faq.id }}" data-bs-parent="#mysteryFaqAccordion">
+              <div class="accordion-body text-secondary line-height-lg pt-2 pb-4 px-4 bg-light-subtle">
+                {{ faq.answer }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-5 bg-white rounded-4 border p-4">
+        <div class="fs-1 text-muted mb-2"><i class="bi bi-question-diamond"></i></div>
+        <h5 class="fw-bold">No Matching FAQs Found</h5>
+        <p class="text-muted small">We couldn't find an answer matching "{{ search_query }}". Ask our floating concierge or open a support ticket!</p>
+        <button class="btn btn-mm-primary btn-sm mt-2" onclick="askAssistant('{{ search_query }}')">
+          <i class="bi bi-robot me-1"></i> Ask AI Assistant
+        </button>
+      </div>
+    {% endif %}
+
+    <!-- Ask Concierge Card CTA -->
+    <div class="mt-5 p-4 rounded-4 text-center" style="background: linear-gradient(135deg, #FAF5FF 0%, #FFF7ED 100%); border: 1.5px solid #DDD6FE;">
+      <h5 class="fw-bold text-dark mb-1">Still Have Questions?</h5>
+      <p class="text-muted small mb-3">Our AI Concierge is available 24/7 on the bottom right of every page, or you can submit a support ticket to our human team.</p>
+      <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-mm-primary" onclick="askAssistant('I have a question not listed in the FAQ')">
+          <i class="bi bi-chat-dots-fill me-1"></i> Open Live Assistant
+        </button>
+        <a href="{{ url_for('support.support_page') }}" class="btn btn-mm-outline">
+          <i class="bi bi-ticket-perforated me-1"></i> Create Support Ticket
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

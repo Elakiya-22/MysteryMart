@@ -1,0 +1,335 @@
+/* ==============================================================================
+   MysteryMart — Floating AI Customer Support Assistant Widget Styles
+   ============================================================================== */
+
+/* Launcher Floating Button */
+.mm-chat-launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7C3AED 0%, #EA580C 100%);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 10px 25px -4px rgba(124, 58, 237, 0.45), 0 4px 10px rgba(234, 88, 12, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  cursor: pointer;
+  z-index: 1050;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mm-chat-launcher:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 16px 30px -4px rgba(124, 58, 237, 0.55);
+}
+
+.mm-chat-launcher-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #10B981;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+}
+
+/* Chat Main Window */
+.mm-chat-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 580px;
+  max-height: calc(100vh - 120px);
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(124, 58, 237, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1050;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mm-chat-window.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Chat Header */
+.mm-chat-header {
+  background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 60%, #EA580C 100%);
+  color: #FFFFFF;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-concierge-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.chat-avatar-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.chat-title-group h6 {
+  color: #FFFFFF;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.chat-status-pill {
+  font-size: 0.725rem;
+  color: #E9D5FF;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34D399;
+}
+
+.chat-close-btn {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.25rem;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.chat-close-btn:hover {
+  opacity: 1;
+}
+
+/* Chat Messages Stream */
+.mm-chat-messages {
+  flex: 1;
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #F8FAFC;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.chat-message-row {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+}
+
+.chat-message-row.user {
+  align-self: flex-end;
+}
+
+.chat-message-row.assistant {
+  align-self: flex-start;
+}
+
+.chat-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  word-break: break-word;
+}
+
+.chat-message-row.user .chat-bubble {
+  background: #7C3AED;
+  color: #FFFFFF;
+  border-bottom-right-radius: 2px;
+}
+
+.chat-message-row.assistant .chat-bubble {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+  border-bottom-left-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.chat-msg-meta {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  margin-top: 0.25rem;
+  padding: 0 0.25rem;
+}
+
+.verified-faq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #F3E8FF;
+  color: #6D28D9;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+}
+
+/* Suggestion Quick Action Chips */
+.chat-suggestions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.suggestion-chip {
+  background: #FFFFFF;
+  color: #6D28D9;
+  border: 1px solid #DDD6FE;
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.suggestion-chip:hover {
+  background: #7C3AED;
+  color: #FFFFFF;
+  border-color: #7C3AED;
+}
+
+/* Ticket Escalation Card inside Chat */
+.chat-ticket-card {
+  background: #FFF7ED;
+  border: 1px dashed #F97316;
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.chat-ticket-btn {
+  background: #EA580C;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.775rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.chat-ticket-btn:hover {
+  background: #C2410C;
+}
+
+/* Feedback & Star Rating Form */
+.chat-feedback-box {
+  background: #F1F5F9;
+  border-radius: 10px;
+  padding: 0.75rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.star-rating-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.35rem 0;
+}
+
+.star-rating-row i {
+  font-size: 1.25rem;
+  color: #CBD5E1;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.star-rating-row i:hover,
+.star-rating-row i.active {
+  color: #F59E0B;
+}
+
+/* Chat Input Bar */
+.mm-chat-footer {
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mm-chat-input {
+  flex: 1;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.mm-chat-input:focus {
+  border-color: #7C3AED;
+}
+
+.mm-chat-send-btn {
+  background: #7C3AED;
+  color: #FFFFFF;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.mm-chat-send-btn:hover {
+  background: #EA580C;
+  transform: scale(1.05);
+}
+
+/* Mobile Media Query for Chat */
+@media (max-width: 575.98px) {
+  .mm-chat-window {
+    right: 12px;
+    bottom: 84px;
+    width: calc(100vw - 24px);
+    height: calc(100vh - 100px);
+  }
+}

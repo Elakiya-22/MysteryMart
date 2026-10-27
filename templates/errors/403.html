@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}403 — Forbidden | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-600 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-danger" style="font-family:'Outfit', sans-serif;">403</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-danger text-white fs-6 px-3 py-1 rounded-pill shadow">Access Prohibited</span>
+      </div>
+    </div>
+    <h1 class="h2 fw-bold text-dark mb-3">Access Prohibited</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      You do not have the required administrative permissions or authorization credentials to access this protected area.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('main.index') }}" class="btn btn-mm-primary btn-lg">Return Home</a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('What is error 403?')">Ask Assistant</button>
+      <a href="{{ url_for('shop.catalog') }}" class="btn btn-mm-outline btn-lg">Shop Catalog</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

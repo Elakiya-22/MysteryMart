@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}460 — MysteryMart Unboxing Concurrency Exception | Application Custom Code{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-650 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-orange" style="font-family:'Outfit', sans-serif; letter-spacing: -2px;">460</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-purple text-white fs-6 px-3 py-1 rounded-pill shadow">MysteryMart Custom Code</span>
+      </div>
+    </div>
+
+    <h1 class="h2 fw-bold text-dark mb-3">Inventory Concurrency Collision</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      <strong>Notice:</strong> <code>460</code> is a MysteryMart application-specific status code, not a standard RFC HTTP status. 
+      It signifies that another shopper finalized checkout on the very last box of this limited batch fractionally ahead of you!
+    </p>
+
+    <div class="alert alert-warning py-3 px-4 rounded-4 small text-start mb-4 border-2 border-warning-subtle">
+      <h6 class="fw-bold text-dark mb-1"><i class="bi bi-clock-history text-orange me-1"></i> What Happened?</h6>
+      <p class="mb-2">
+        To prevent unfulfilled orders, MysteryMart strictly guarantees stock allocations via database row locking. When the remaining quantity drops to zero during checkout confirmation, our transaction manager rolls back cleanly to protect you from being charged.
+      </p>
+      <div class="fw-bold text-dark">Suggested Resolution:</div>
+      <div class="text-secondary">Please return to our Shop catalog to select an alternative box tier or category. Stock batches refresh frequently!</div>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('shop.catalog') }}" class="btn btn-mm-primary btn-lg">
+        <i class="bi bi-box-seam me-1"></i> Choose Alternative Box
+      </a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('Can you explain what custom error 460 means?')">
+        <i class="bi bi-robot me-1"></i> Ask the Assistant
+      </button>
+      <a href="{{ url_for('main.index') }}" class="btn btn-mm-outline btn-lg">
+        <i class="bi bi-house-door me-1"></i> Return Home
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Support &amp; Ticket Center | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Customer Support</li>
+    </ol>
+  </nav>
+
+  <div class="text-center py-4 max-w-700 mx-auto">
+    <span class="badge bg-purple-subtle text-purple px-3 py-1 rounded-pill fw-bold text-uppercase mb-2">Help Desk &amp; Concierge</span>
+    <h1 class="display-6 fw-bold text-dark mb-2">How Can We Assist Your Unboxing?</h1>
+    <p class="text-muted small">Submit a priority concierge ticket or verify the resolution status of an existing inquiry.</p>
+  </div>
+
+  <div class="row g-5 max-w-1000 mx-auto">
+    <!-- Left Column: Submit New Ticket Form -->
+    <div class="col-lg-7">
+      <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm h-100">
+        <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-ticket-perforated-fill text-purple"></i> Create Support Ticket
+        </h4>
+        <p class="text-muted small mb-4">Our dedicated team will review your query and reply directly to your registered email.</p>
+
+        {% if ticket_created %}
+          <!-- Success Alert with Ticket Reference -->
+          <div class="alert alert-success p-3 rounded-4 mb-4 border-2 border-success">
+            <div class="d-flex align-items-center gap-2 text-success fw-bold mb-1">
+              <i class="bi bi-check-circle-fill fs-5"></i> Ticket Created Successfully!
+            </div>
+            <div class="small text-dark mb-2">
+              Your unique reference number is: 
+              <span class="badge bg-dark font-monospace fs-6 px-3 py-2 ms-1">{{ ticket_created.ticket_number }}</span>
+            </div>
+            <p class="smaller text-muted mb-0">Please keep this ticket code to check updates in the status tracking panel.</p>
+          </div>
+        {% endif %}
+
+        <form action="{{ url_for('support.support_page') }}" method="POST">
+          <input type="hidden" name="create_ticket" value="1">
+
+          <div class="mb-3">
+            <label for="customer_name" class="form-label small fw-bold text-secondary">Your Name <span class="text-danger">*</span></label>
+            <input type="text" name="customer_name" id="customer_name" class="form-control" placeholder="Jane Doe" value="{{ user_name }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="customer_email" class="form-label small fw-bold text-secondary">Email Address <span class="text-danger">*</span></label>
+            <input type="email" name="customer_email" id="customer_email" class="form-control" placeholder="jane@example.com" value="{{ user_email }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="subject" class="form-label small fw-bold text-secondary">Subject <span class="text-danger">*</span></label>
+            <input type="text" name="subject" id="subject" class="form-control" placeholder="Inquiry about CyberTech Box or delivery timeline" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="description" class="form-label small fw-bold text-secondary">Detailed Description <span class="text-danger">*</span></label>
+            <textarea name="description" id="description" class="form-control" rows="4" placeholder="Please describe your question or issue in detail..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-mm-primary btn-lg w-100" id="submitTicketBtn">
+            <i class="bi bi-send-fill me-1"></i> Submit Priority Ticket
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Column: Ticket Status Checker & Quick Support Links -->
+    <div class="col-lg-5">
+      <!-- Status Checker Card -->
+      <div class="bg-white rounded-4 border p-4 shadow-sm mb-4">
+        <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-search text-orange"></i> Track Ticket Status
+        </h5>
+        <p class="text-muted small mb-3">Enter your ticket reference and registered email to verify progress.</p>
+
+        <form action="{{ url_for('support.support_page') }}" method="POST">
+          <input type="hidden" name="track_ticket" value="1">
+
+          <div class="mb-3">
+            <label for="ticket_number" class="form-label small fw-bold text-secondary">Ticket Reference <span class="text-danger">*</span></label>
+            <input type="text" name="ticket_number" id="ticket_number" class="form-control font-monospace" placeholder="MM-TKT-XXXXXX" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="verify_email" class="form-label small fw-bold text-secondary">Registered Email <span class="text-danger">*</span></label>
+            <input type="email" name="verify_email" id="verify_email" class="form-control" placeholder="jane@example.com" value="{{ user_email }}" required>
+          </div>
+
+          <button type="submit" class="btn btn-mm-outline w-100" id="trackTicketBtn">
+            <i class="bi bi-arrow-right-circle me-1"></i> Verify Status
+          </button>
+        </form>
+
+        <!-- Lookup Result Display -->
+        {% if lookup_result %}
+          <div class="mt-4 p-3 rounded-3 bg-light border">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-purple font-monospace">{{ lookup_result.ticket_number }}</span>
+              <span class="badge {% if lookup_result.status == 'Resolved' %}bg-success{% elif lookup_result.status == 'In Progress' %}bg-primary{% else %}bg-warning text-dark{% endif %}">
+                {{ lookup_result.status }}
+              </span>
+            </div>
+            <div class="fw-bold small text-dark mb-1">{{ lookup_result.subject }}</div>
+            <p class="smaller text-muted mb-2">{{ lookup_result.description }}</p>
+            <div class="smaller text-secondary">Created: {{ lookup_result.created_at }}</div>
+            {% if lookup_result.resolution_notes %}
+              <div class="mt-2 pt-2 border-top text-success smaller">
+                <strong>Resolution Note:</strong> {{ lookup_result.resolution_notes }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick AI Concierge Trigger Card -->
+      <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #FAF5FF 0%, #EDE9FE 100%); border: 1.5px solid #DDD6FE;">
+        <h6 class="fw-bold text-purple mb-2"><i class="bi bi-robot fs-5 me-1"></i> Instant AI Answers</h6>
+        <p class="small text-muted mb-3">Need immediate help with common questions? Our AI concierge can answer questions from our SQL FAQ database in seconds.</p>
+        <button class="btn btn-sm btn-mm-primary w-100" onclick="askAssistant('I need help with my mystery box')">
+          Ask Floating Concierge Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

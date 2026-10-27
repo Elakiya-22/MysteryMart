@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}500 — Internal Server Error | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-600 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-danger" style="font-family:'Outfit', sans-serif; letter-spacing: -2px;">500</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-dark text-white fs-6 px-3 py-1 rounded-pill shadow">Diagnostic Alert</span>
+      </div>
+    </div>
+
+    <h1 class="h2 fw-bold text-dark mb-3">Something Went Unexpected in Our Workshop</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      An unexpected server-side event occurred while handling your request. Our automated diagnostic logging has safely captured the technical details for our engineering team. 
+      <strong>Your cart items and payment credentials remain safe.</strong>
+    </p>
+
+    <!-- Required Action Buttons -->
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('main.index') }}" class="btn btn-mm-primary btn-lg" id="error500HomeBtn">
+        <i class="bi bi-house-door me-1"></i> Return Home
+      </a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('I encountered an HTTP 500 internal error. Can you help me troubleshoot?')" id="error500AskAssistantBtn">
+        <i class="bi bi-robot me-1"></i> Ask the Assistant
+      </button>
+      <a href="{{ url_for('support.support_page') }}" class="btn btn-mm-outline btn-lg">
+        <i class="bi bi-ticket-perforated me-1"></i> Open Support Ticket
+      </a>
+    </div>
+
+    <div class="mt-5 p-3 rounded-3 bg-white border text-start small text-muted max-w-500 mx-auto">
+      <div class="fw-bold text-dark mb-1"><i class="bi bi-shield-check text-success me-1"></i> Security Assurance:</div>
+      <p class="mb-0">
+        In compliance with MysteryMart security policies, technical stack traces, system paths, and internal server parameters are strictly isolated in server diagnostic logs and never exposed to the public browser.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MysteryMart — Unbox the Unexpected!{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Discover curated mystery boxes in Tech, Gaming, Stationery, Fashion, and Luxury. Guaranteed inclusions and verified authentic value with fast shipping.{% endblock %}">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 & Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+  <!-- Animate.css for smooth micro-animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <!-- MysteryMart Global Styles & AI Chat Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Announcement Strip -->
+  <div class="top-announcement-bar">
+    <span>✨ Unbox the Unexpected! Free insured delivery on orders over $99.</span>
+    <a href="{{ url_for('shop.catalog') }}">Explore Mystery Boxes →</a>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar navbar-expand-lg mm-navbar sticky-top">
+    <div class="container">
+      <!-- Logo Branding -->
+      <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.index') }}" id="navLogo">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="MysteryMart" class="me-2">
+      </a>
+
+      <!-- Mobile Hamburger Toggle -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mysteryNavbar" aria-controls="mysteryNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Content -->
+      <div class="collapse navbar-collapse" id="mysteryNavbar">
+        <!-- Search Bar -->
+        <form class="navbar-search-form mx-lg-4 my-2 my-lg-0" action="{{ url_for('shop.catalog') }}" method="GET">
+          <input type="text" name="q" class="navbar-search-input" placeholder="Search mystery boxes, gadgets, gaming..." value="{{ request.args.get('q', '') }}" id="navSearchInput">
+          <button type="submit" class="navbar-search-btn" aria-label="Search" id="navSearchSubmit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+
+        <!-- Navigation Links -->
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'shop.catalog' %}active{% endif %}" href="{{ url_for('shop.catalog') }}" id="navShopLink">
+              <i class="bi bi-box-seam me-1 text-purple"></i> Shop Boxes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'faq.faq_page' %}active{% endif %}" href="{{ url_for('faq.faq_page') }}" id="navFaqLink">
+              <i class="bi bi-question-circle me-1"></i> FAQ
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'support.support_page' %}active{% endif %}" href="{{ url_for('support.support_page') }}" id="navSupportLink">
+              <i class="bi bi-headset me-1"></i> Support
+            </a>
+          </li>
+
+          <!-- Auth Links -->
+          {% if current_user %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-5 text-purple"></i>
+                <span>{{ current_user.username }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3" aria-labelledby="userMenuDropdown">
+                <li><a class="dropdown-item py-2" href="{{ url_for('auth.my_orders') }}"><i class="bi bi-clock-history me-2"></i> My Order History</a></li>
+                <li><a class="dropdown-item py-2" href="{{ url_for('support.support_page') }}"><i class="bi bi-ticket-detailed me-2"></i> Track Support Ticket</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item py-2 text-danger" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right me-2"></i> Log Out</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.login') }}" id="navLoginLink">Log In</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-sm btn-mm-outline ms-lg-1" href="{{ url_for('auth.register') }}" id="navRegisterLink">Register</a>
+            </li>
+          {% endif %}
+
+          <!-- Cart Action -->
+          <li class="nav-item ms-lg-2">
+            <a class="cart-icon-btn text-decoration-none" href="{{ url_for('cart.view_cart') }}" id="navCartBtn" aria-label="Shopping Cart">
+              <i class="bi bi-cart3 fs-5"></i>
+              <span class="d-none d-xl-inline fw-bold">Cart</span>
+              <span class="cart-badge" id="navCartBadge">{{ cart_item_count }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 shadow-sm d-flex align-items-center gap-2" role="alert">
+            <i class="bi {% if category == 'success' %}bi-check-circle-fill{% elif category == 'danger' %}bi-exclamation-triangle-fill{% else %}bi-info-circle-fill{% endif %} fs-5"></i>
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Page Main Content Block -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="mm-footer">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Brand & Mission -->
+        <div class="col-lg-4 col-md-6">
+          <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="MysteryMart" height="42" class="mb-3">
+          <p class="text-secondary small pe-lg-4">
+            MysteryMart is the premier online surprise box shopping destination. Curating authentic gadgets, gaming gear, stationery, and fashion with 100% verified value transparency.
+          </p>
+          <div class="d-flex gap-3 text-secondary fs-5 mt-3">
+            <a href="#" class="text-secondary" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-secondary" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-secondary" aria-label="Discord"><i class="bi bi-discord"></i></a>
+            <a href="#" class="text-secondary" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Mystery Categories -->
+        <div class="col-lg-2 col-md-3 col-6">
+          <h5>Categories</h5>
+          <ul>
+            <li><a href="{{ url_for('shop.catalog', category='Gadget Mystery Box') }}">Gadget Box</a></li>
+            <li><a href="{{ url_for('shop.catalog', category='Gaming Mystery Box') }}">Gaming Box</a></li>
+            <li><a href="{{ url_for('shop.catalog', category='Stationery Mystery Box') }}">Stationery Box</a></li>
+            <li><a href="{{ url_for('shop.catalog', category='Fashion Mystery Box') }}">Fashion Box</a></li>
+            <li><a href="{{ url_for('shop.catalog', category='Beauty & Accessories Mystery Box') }}">Beauty Box</a></li>
+            <li><a href="{{ url_for('shop.catalog', category='Premium Mystery Box') }}">Premium Sovereign</a></li>
+          </ul>
+        </div>
+
+        <!-- Help & Service -->
+        <div class="col-lg-3 col-md-3 col-6">
+          <h5>Customer Care</h5>
+          <ul>
+            <li><a href="{{ url_for('faq.faq_page') }}">Frequently Asked Questions</a></li>
+            <li><a href="{{ url_for('support.support_page') }}">Support &amp; Ticket Center</a></li>
+            <li><a href="{{ url_for('main.how_it_works') }}">How MysteryMart Works</a></li>
+            <li><a href="{{ url_for('auth.my_orders') }}">Track Existing Orders</a></li>
+            <li><a href="{{ url_for('main.health_check') }}">System Health Status</a></li>
+            <li><a href="/test-460">Documentation: Error 460</a></li>
+          </ul>
+        </div>
+
+        <!-- Value Guarantees -->
+        <div class="col-lg-3 col-md-12">
+          <h5>Our Guarantees</h5>
+          <div class="d-flex flex-column gap-2 small">
+            <div class="d-flex align-items-start gap-2">
+              <i class="bi bi-patch-check-fill text-warning fs-5"></i>
+              <div><strong>Guaranteed Value:</strong> Box items always meet or exceed the retail price paid.</div>
+            </div>
+            <div class="d-flex align-items-start gap-2">
+              <i class="bi bi-box-seam-fill text-orange fs-5"></i>
+              <div><strong>Sealed &amp; Pristine:</strong> Factory-fresh items shipped in weatherproof packing.</div>
+            </div>
+            <div class="d-flex align-items-start gap-2">
+              <i class="bi bi-shield-lock-fill text-success fs-5"></i>
+              <div><strong>Secure Transactions:</strong> Zero stored raw card data. Simulated checkout.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Strip -->
+      <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div>
+          © {{ current_year }} MysteryMart Inc. All rights reserved. Clearly labeled demo shopping platform.
+        </div>
+        <div class="d-flex gap-3">
+          <a href="{{ url_for('faq.faq_page') }}">Privacy</a>
+          <a href="{{ url_for('faq.faq_page') }}">Terms</a>
+          <a href="{{ url_for('support.support_page') }}">Contact Concierge</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       Reusable Floating AI Customer Support Assistant Widget (Appears on every page!)
+       ========================================================================= -->
+  <button class="mm-chat-launcher" id="mmChatLauncher" aria-label="Open AI Customer Support Concierge">
+    <i class="bi bi-chat-dots-fill"></i>
+    <span class="mm-chat-launcher-badge"></span>
+  </button>
+
+  <div class="mm-chat-window" id="mmChatWindow" role="dialog" aria-modal="true" aria-labelledby="chatHeaderTitle">
+    <!-- Header -->
+    <div class="mm-chat-header">
+      <div class="chat-concierge-info">
+        <div class="chat-avatar-icon">
+          <i class="bi bi-robot"></i>
+        </div>
+        <div class="chat-title-group">
+          <h6 id="chatHeaderTitle">MysteryMart Concierge</h6>
+          <div class="chat-status-pill">
+            <span class="status-dot"></span>
+            <span>Online &bull; SQL FAQ Grounded</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="chat-close-btn" id="mmChatClose" aria-label="Close Assistant">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="mm-chat-messages" id="mmChatMessages">
+      <!-- Dynamically filled by chat.js -->
+    </div>
+
+    <!-- Input Footer -->
+    <div class="mm-chat-footer">
+      <input type="text" class="mm-chat-input" id="mmChatInput" placeholder="Ask about boxes, shipping, HTTP error codes..." autocomplete="off">
+      <button class="mm-chat-send-btn" id="mmChatSend" aria-label="Send Message">
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="mm-toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090;"></div>
+
+  <!-- Bootstrap 5 JavaScript Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- MysteryMart Core Scripts & Floating Assistant -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — MysteryMart Details & Guaranteed Inclusions{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('shop.catalog') }}">Shop</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('shop.catalog', category=product.category) }}">{{ product.category }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="bg-white rounded-4 border p-4 p-lg-5 shadow-sm mb-5">
+    <div class="row g-5">
+      <!-- Product Image Gallery View -->
+      <div class="col-lg-6">
+        <div class="position-relative bg-slate-50 p-4 rounded-4 text-center border overflow-hidden" style="min-height: 380px; display: flex; align-items: center; justify-content: center; background: #FAF5FF;">
+          {% if product.badge %}
+            <span class="product-badge {% if product.badge in ['Hot', 'Popular'] %}orange{% endif %}">{{ product.badge }}</span>
+          {% endif %}
+          <span class="product-demo-tag">Demo Mystery Box</span>
+
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" class="img-fluid rounded-3" style="max-height: 360px; object-fit: contain;">
+        </div>
+
+        <!-- Authenticity & Safe Shipping Banner -->
+        <div class="row g-2 mt-3 text-center small text-secondary">
+          <div class="col-4 p-2 bg-light rounded-3">
+            <i class="bi bi-shield-lock text-purple fs-5 d-block mb-1"></i>
+            <span class="fw-bold">100% Guaranteed</span>
+            <div class="smaller text-muted">Value Exceeds Cost</div>
+          </div>
+          <div class="col-4 p-2 bg-light rounded-3">
+            <i class="bi bi-box-seam text-orange fs-5 d-block mb-1"></i>
+            <span class="fw-bold">Factory Sealed</span>
+            <div class="smaller text-muted">Untampered Surprise</div>
+          </div>
+          <div class="col-4 p-2 bg-light rounded-3">
+            <i class="bi bi-truck text-success fs-5 d-block mb-1"></i>
+            <span class="fw-bold">Weather-Safe</span>
+            <div class="smaller text-muted">Dispatched in 24h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Information & Purchase Panel -->
+      <div class="col-lg-6">
+        <div class="badge bg-purple-subtle text-purple mb-2 fw-bold text-uppercase px-3 py-1">{{ product.category }}</div>
+        <h1 class="h2 fw-bold text-dark mb-2">{{ product.name }}</h1>
+
+        <!-- Rating & Tier -->
+        <div class="d-flex align-items-center gap-3 mb-3 small">
+          <div class="text-warning fw-bold">
+            <i class="bi bi-star-fill"></i> {{ product.rating }}
+            <span class="text-secondary fw-normal">({{ product.review_count }} verified reviews)</span>
+          </div>
+          <span class="text-muted">&bull;</span>
+          <div class="text-secondary fw-bold"><i class="bi bi-award me-1 text-purple"></i>{{ product.box_tier }}</div>
+        </div>
+
+        <!-- Price -->
+        <div class="d-flex align-items-baseline gap-2 mb-3">
+          <span class="display-6 fw-bold text-dark">${{ "%.2f"|format(product.price) }}</span>
+          <span class="text-muted small">Inclusive of standard taxes</span>
+        </div>
+
+        <p class="text-muted line-height-lg mb-4">{{ product.description }}</p>
+
+        <!-- Guaranteed Inclusions Section (Critical Transparency Requirement) -->
+        <div class="p-3 rounded-4 mb-4" style="background-color: #FAF5FF; border: 1.5px solid #DDD6FE;">
+          <h5 class="fw-bold text-purple h6 mb-2 d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill text-success"></i> Guaranteed Box Inclusions:
+          </h5>
+          <p class="small text-muted mb-2">You are guaranteed to receive all of the following verified essentials:</p>
+          <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+            {% for inc in product.get_guaranteed_list() %}
+              <li class="small d-flex align-items-start gap-2 text-dark">
+                <i class="bi bi-arrow-right-circle-fill text-purple mt-1"></i>
+                <span class="fw-semibold">{{ inc }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Surprise Variance Disclosure (Requirement C) -->
+        <div class="alert alert-warning py-2 px-3 small rounded-3 d-flex align-items-start gap-2 mb-4">
+          <i class="bi bi-info-circle-fill text-warning fs-5 flex-shrink-0 mt-1"></i>
+          <div>
+            <strong>Surprise Contents Disclosure:</strong> In addition to the guaranteed essentials above, each box contains authentic bonus surprise items hand-picked from verified stock batches. Exact colorways, variations, and bonus items vary by batch to deliver an authentic unboxing thrill.
+          </div>
+        </div>
+
+        <!-- Condition & Delivery Info -->
+        <div class="border-top border-bottom py-3 mb-4 small">
+          <div class="row g-2">
+            <div class="col-6">
+              <span class="text-muted d-block">Condition:</span>
+              <span class="fw-bold text-dark">{{ product.box_condition }}</span>
+            </div>
+            <div class="col-6">
+              <span class="text-muted d-block">Dispatch Timeline:</span>
+              <span class="fw-bold text-dark">{{ product.delivery_info }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add to Cart Form with Quantity Selector -->
+        {% if product.stock > 0 %}
+          <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="ajax-add-to-cart">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <div class="row g-3 align-items-center mb-3">
+              <div class="col-auto">
+                <label for="quantitySelect" class="form-label fw-bold small text-secondary mb-0">Quantity:</label>
+              </div>
+              <div class="col-auto">
+                <select name="quantity" id="quantitySelect" class="form-select form-select-sm" style="width: 80px;">
+                  {% for q in range(1, [product.stock + 1, 10]|min) %}
+                    <option value="{{ q }}">{{ q }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                  {{ product.stock }} boxes available
+                </span>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3">
+              <button type="submit" class="btn btn-mm-primary btn-lg flex-grow-1" id="addToCartBtn">
+                <i class="bi bi-cart-plus me-1"></i> Add to Mystery Cart
+              </button>
+            </div>
+          </form>
+        {% else %}
+          <div class="alert alert-danger mb-0">
+            <strong>Currently Sold Out:</strong> This limited mystery box run has been fully unboxed! Check back soon or ask our AI Concierge when stock refreshes.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Mystery Boxes -->
+  {% if related_products %}
+    <div class="mb-5">
+      <h3 class="h4 fw-bold text-dark mb-3">You May Also Want to Unbox</h3>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for rel in related_products %}
+          <div class="col">
+            <div class="mm-product-card">
+              {% if rel.badge %}
+                <div class="product-badge">{{ rel.badge }}</div>
+              {% endif %}
+              <a href="{{ url_for('shop.product_details', product_id=rel.id) }}" class="product-image-container">
+                <img src="{{ rel.image_url }}" alt="{{ rel.name }}" loading="lazy">
+              </a>
+              <div class="product-card-body">
+                <div class="product-category-meta">{{ rel.category }}</div>
+                <h4 class="product-card-title">
+                  <a href="{{ url_for('shop.product_details', product_id=rel.id) }}">{{ rel.name }}</a>
+                </h4>
+                <div class="product-card-footer">
+                  <div class="product-price">${{ "%.2f"|format(rel.price) }}</div>
+                  <a href="{{ url_for('shop.product_details', product_id=rel.id) }}" class="btn btn-sm btn-mm-outline">
+                    View Inclusions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

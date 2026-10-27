@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed #{{ order.order_number }} | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="max-w-700 mx-auto">
+    <!-- Success Banner Card -->
+    <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm text-center mb-4">
+      <div class="text-success display-4 mb-3">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h1 class="h2 fw-bold text-dark mb-2">Unboxing Anticipation Begins!</h1>
+      <p class="text-muted mb-3">Thank you, <strong>{{ order.customer_name }}</strong>! Your surprise box order has been confirmed and transferred to our packaging team.</p>
+
+      <div class="d-inline-flex align-items-center gap-2 p-2 px-4 rounded-pill bg-purple-subtle text-purple fw-bold mb-4">
+        <span>Order Reference:</span>
+        <span class="badge bg-purple text-white fs-6 font-monospace">{{ order.order_number }}</span>
+      </div>
+
+      <!-- Weather Impact Snapshot Note -->
+      {% if order.weather_note %}
+        <div class="delivery-weather-box text-start mx-auto mb-4" style="max-width: 520px;">
+          <div class="weather-icon-lg">📦</div>
+          <div class="small">
+            <strong>Dispatch &amp; Route Logistics:</strong> {{ order.weather_note }}
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a href="{{ url_for('shop.catalog') }}" class="btn btn-mm-primary">
+          <i class="bi bi-box-seam me-1"></i> Continue Exploring
+        </a>
+        <a href="{{ url_for('support.support_page') }}" class="btn btn-mm-outline">
+          <i class="bi bi-headset me-1"></i> Need Help with this Order?
+        </a>
+      </div>
+    </div>
+
+    <!-- Order Breakdown Card -->
+    <div class="bg-white rounded-4 border p-4 shadow-sm">
+      <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">Order Breakdown</h5>
+
+      <div class="table-responsive mb-3">
+        <table class="table align-middle">
+          <thead class="table-light small text-secondary">
+            <tr>
+              <th>Mystery Box</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.items %}
+              <tr>
+                <td>
+                  <div class="fw-bold text-dark">{{ item.product.name if item.product else 'Curated Mystery Box' }}</div>
+                  <div class="smaller text-purple">{{ item.product.category if item.product else 'Surprise' }}</div>
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ "%.2f"|format(item.unit_price) }}</td>
+                <td class="text-end fw-bold text-dark">${{ "%.2f"|format(item.unit_price * item.quantity) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="border-top">
+            <tr>
+              <td colspan="3" class="text-end text-muted small">Subtotal:</td>
+              <td class="text-end fw-bold text-dark">${{ "%.2f"|format(order.subtotal) }}</td>
+            </tr>
+            <tr>
+              <td colspan="3" class="text-end text-muted small">Insured Delivery:</td>
+              <td class="text-end fw-bold text-dark">
+                {% if order.delivery_fee == 0 %}
+                  <span class="text-success">FREE</span>
+                {% else %}
+                  ${{ "%.2f"|format(order.delivery_fee) }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="fs-5">
+              <td colspan="3" class="text-end fw-bold text-dark">Total Amount:</td>
+              <td class="text-end fw-bold text-purple">${{ "%.2f"|format(order.total_amount) }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Shipping Destination Address Details -->
+      <div class="bg-slate-50 p-3 rounded-3 border small">
+        <h6 class="fw-bold text-secondary text-uppercase smaller mb-2">Delivery Destination:</h6>
+        <div><strong>{{ order.customer_name }}</strong> &bull; {{ order.customer_email }}</div>
+        <div>{{ order.shipping_address }}</div>
+        <div>{{ order.city }}{% if order.state %}, {{ order.state }}{% endif %} {{ order.postal_code }}</div>
+        {% if order.delivery_notes %}
+          <div class="text-muted mt-1 fst-italic">Note: {{ order.delivery_notes }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

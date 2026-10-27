@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Shop Mystery Boxes | MysteryMart Catalog{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb & Header -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Shop Mystery Boxes</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
+    <div>
+      <h1 class="h2 fw-bold text-dark mb-1">Mystery Box Collection</h1>
+      <p class="text-muted small mb-0">Showing {{ total_count }} mystery box tiers with guaranteed authentic inclusions.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Filter Sidebar (Desktop & Offcanvas on Mobile) -->
+    <div class="col-lg-3">
+      <div class="bg-white p-3 p-lg-4 rounded-4 border border-slate-200 shadow-sm sticky-top" style="top: 90px; z-index: 10;">
+        <h5 class="fw-bold mb-3 d-flex align-items-center justify-content-between">
+          <span><i class="bi bi-funnel me-1 text-purple"></i> Filters</span>
+          {% if selected_category != 'All' or search_query or min_price or max_price %}
+            <a href="{{ url_for('shop.catalog') }}" class="small text-danger text-decoration-none fw-normal">Reset</a>
+          {% endif %}
+        </h5>
+
+        <form action="{{ url_for('shop.catalog') }}" method="GET" id="catalogFilterForm">
+          <!-- Hidden search retain -->
+          {% if search_query %}
+            <input type="hidden" name="q" value="{{ search_query }}">
+          {% endif %}
+
+          <!-- Category Filter -->
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-uppercase text-secondary">Categories</label>
+            <div class="d-flex flex-column gap-1">
+              {% for cat in categories %}
+                <a href="{{ url_for('shop.catalog', category=cat, q=search_query, sort=sort_by) }}" 
+                   class="btn btn-sm text-start py-2 px-3 rounded-3 {% if selected_category == cat %}btn-purple-subtle fw-bold text-purple bg-purple-light{% else %}text-secondary hover-bg-light{% endif %}">
+                  {{ cat }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Price Range Filter -->
+          <div class="mb-4">
+            <label class="form-label fw-bold small text-uppercase text-secondary">Price Range ($)</label>
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <input type="number" step="0.01" name="min_price" class="form-control form-control-sm" placeholder="Min" value="{{ min_price if min_price is not none else '' }}">
+              <span class="text-muted">-</span>
+              <input type="number" step="0.01" name="max_price" class="form-control form-control-sm" placeholder="Max" value="{{ max_price if max_price is not none else '' }}">
+            </div>
+            <button type="submit" class="btn btn-sm btn-outline-secondary w-100 mt-2">Apply Price Filter</button>
+          </div>
+
+          <!-- Active Category Hidden Input for form submission -->
+          <input type="hidden" name="category" value="{{ selected_category }}">
+          <input type="hidden" name="sort" value="{{ sort_by }}">
+        </form>
+
+        <!-- Value Guarantee Card in Sidebar -->
+        <div class="mt-4 p-3 rounded-3" style="background: #FFF7ED; border: 1px dashed #F97316;">
+          <div class="d-flex align-items-center gap-2 mb-1 text-orange fw-bold small">
+            <i class="bi bi-shield-check fs-6"></i> Value Assurance
+          </div>
+          <p class="smaller text-muted mb-0" style="font-size: 0.775rem;">
+            Every box's retail contents meet or exceed the list price. Demo products are authentic brand items.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid & Sort Controls -->
+    <div class="col-lg-9">
+      <!-- Sort & Active Filters Toolbar -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 bg-white rounded-3 border">
+        <div class="small text-muted">
+          {% if search_query %}
+            Results for <span class="fw-bold text-dark">"{{ search_query }}"</span>
+          {% else %}
+            Showing category: <span class="fw-bold text-purple">{{ selected_category }}</span>
+          {% endif %}
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div class="d-flex align-items-center gap-2">
+          <label for="sortDropdown" class="small text-muted fw-bold mb-0">Sort By:</label>
+          <select id="sortDropdown" class="form-select form-select-sm" style="width: auto;" onchange="location = this.value;">
+            <option value="{{ url_for('shop.catalog', category=selected_category, q=search_query, min_price=min_price, max_price=max_price, sort='popular') }}" {% if sort_by == 'popular' %}selected{% endif %}>Most Popular</option>
+            <option value="{{ url_for('shop.catalog', category=selected_category, q=search_query, min_price=min_price, max_price=max_price, sort='rating') }}" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+            <option value="{{ url_for('shop.catalog', category=selected_category, q=search_query, min_price=min_price, max_price=max_price, sort='price_low') }}" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="{{ url_for('shop.catalog', category=selected_category, q=search_query, min_price=min_price, max_price=max_price, sort='price_high') }}" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="{{ url_for('shop.catalog', category=selected_category, q=search_query, min_price=min_price, max_price=max_price, sort='newest') }}" {% if sort_by == 'newest' %}selected{% endif %}>Newest Additions</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      {% if products %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+          {% for product in products %}
+            <div class="col">
+              <div class="mm-product-card">
+                {% if product.badge %}
+                  <div class="product-badge {% if product.badge in ['Hot', 'Popular'] %}orange{% endif %}">
+                    {{ product.badge }}
+                  </div>
+                {% endif %}
+                <div class="product-demo-tag">Demo Box</div>
+
+                <a href="{{ url_for('shop.product_details', product_id=product.id) }}" class="product-image-container">
+                  <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                </a>
+
+                <div class="product-card-body">
+                  <div class="product-category-meta">{{ product.category }}</div>
+                  <h3 class="product-card-title">
+                    <a href="{{ url_for('shop.product_details', product_id=product.id) }}">{{ product.name }}</a>
+                  </h3>
+                  
+                  <div class="product-guaranteed-pills">
+                    {% for item in product.get_guaranteed_list()[:2] %}
+                      <span class="guaranteed-pill"><i class="bi bi-check2"></i> {{ item }}</span>
+                    {% endfor %}
+                  </div>
+
+                  <div class="d-flex align-items-center justify-content-between my-2 small text-muted">
+                    <div>
+                      <span class="text-warning fw-bold"><i class="bi bi-star-fill"></i> {{ product.rating }}</span>
+                      <span class="text-secondary">({{ product.review_count }})</span>
+                    </div>
+                    <div>
+                      {% if product.stock > 0 %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">In Stock ({{ product.stock }})</span>
+                      {% else %}
+                        <span class="badge bg-danger-subtle text-danger">Sold Out</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="product-card-footer">
+                    <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+                    
+                    <div class="d-flex gap-2">
+                      <a href="{{ url_for('shop.product_details', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary" title="View Inclusions Details">
+                        <i class="bi bi-info-circle"></i>
+                      </a>
+                      <form action="{{ url_for('cart.add_to_cart') }}" method="POST" class="ajax-add-to-cart m-0">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-sm btn-mm-primary" {% if product.stock <= 0 %}disabled{% endif %}>
+                          <i class="bi bi-cart-plus me-1"></i> Add
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-5 bg-white rounded-4 border p-4">
+          <div class="fs-1 text-muted mb-3"><i class="bi bi-search"></i></div>
+          <h4 class="fw-bold text-dark">No Mystery Boxes Found</h4>
+          <p class="text-muted small">No items matched your current filter criteria or search keyword.</p>
+          <a href="{{ url_for('shop.catalog') }}" class="btn btn-mm-primary mt-2">
+            View All Mystery Boxes
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

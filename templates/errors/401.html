@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}401 — Unauthorized | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="max-w-600 mx-auto py-5">
+    <div class="position-relative d-inline-block mb-4">
+      <span class="display-1 fw-black text-purple" style="font-family:'Outfit', sans-serif;">401</span>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <span class="badge bg-purple text-white fs-6 px-3 py-1 rounded-pill shadow">Sign-In Required</span>
+      </div>
+    </div>
+    <h1 class="h2 fw-bold text-dark mb-3">Authentication Required</h1>
+    <p class="text-secondary line-height-lg mb-4">
+      You need to be signed in to access your mystery box orders, unboxing history, or customer profile.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-mm-primary btn-lg">Log In Now</a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-mm-outline btn-lg">Register Account</a>
+      <button class="btn btn-mm-orange btn-lg" onclick="askAssistant('Why do I see a 401 error?')">Ask Assistant</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Create an Account | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="max-w-450 mx-auto">
+    <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm">
+      <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="MysteryMart" height="42" class="mb-2">
+        <h2 class="h4 fw-bold text-dark mt-2">Join MysteryMart</h2>
+        <p class="text-muted small">Create an account to start unboxing guaranteed surprises.</p>
+      </div>
+
+      <form action="{{ url_for('auth.register') }}" method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label small fw-bold text-secondary">Username <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-purple"></i></span>
+            <input type="text" name="username" id="username" class="form-control border-start-0" placeholder="unboxer_alex" value="{{ username if username else '' }}" required autofocus>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label small fw-bold text-secondary">Email Address <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-purple"></i></span>
+            <input type="email" name="email" id="email" class="form-control border-start-0" placeholder="alex@example.com" value="{{ email if email else '' }}" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label small fw-bold text-secondary">Password <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-purple"></i></span>
+            <input type="password" name="password" id="password" class="form-control border-start-0" placeholder="At least 6 characters" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="confirm_password" class="form-label small fw-bold text-secondary">Confirm Password <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-shield-check text-purple"></i></span>
+            <input type="password" name="confirm_password" id="confirm_password" class="form-control border-start-0" placeholder="Repeat your password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-mm-primary btn-lg w-100 mb-3" id="registerSubmitBtn">
+          Create MysteryMart Account
+        </button>
+
+        <div class="text-center small text-muted">
+          Already have an account? 
+          <a href="{{ url_for('auth.login') }}" class="fw-bold text-purple">Sign in</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

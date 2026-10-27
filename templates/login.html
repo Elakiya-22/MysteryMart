@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Log In | MysteryMart{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="max-w-450 mx-auto">
+    <div class="bg-white rounded-4 border p-4 p-md-5 shadow-sm">
+      <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="MysteryMart" height="42" class="mb-2">
+        <h2 class="h4 fw-bold text-dark mt-2">Welcome Back!</h2>
+        <p class="text-muted small">Sign in to track orders and manage your mystery unboxings.</p>
+      </div>
+
+      <!-- Demo Accounts Card for Evaluators & Reviewers -->
+      <div class="alert alert-purple-subtle p-3 rounded-3 small mb-4" style="background:#FAF5FF; border: 1px dashed #7C3AED;">
+        <div class="fw-bold text-purple mb-1"><i class="bi bi-key-fill"></i> Quick Demo Test Credentials:</div>
+        <div><strong>Username:</strong> <code class="text-dark">demouser</code></div>
+        <div><strong>Password:</strong> <code class="text-dark">MysteryMart2026!</code></div>
+      </div>
+
+      <form action="{{ url_for('auth.login', next=request.args.get('next', '')) }}" method="POST">
+        <div class="mb-3">
+          <label for="identity" class="form-label small fw-bold text-secondary">Username or Email</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-purple"></i></span>
+            <input type="text" name="identity" id="identity" class="form-control border-start-0" placeholder="demouser or demo@mysterymart.com" value="{{ identity if identity else 'demouser' }}" required autofocus>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label small fw-bold text-secondary">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-purple"></i></span>
+            <input type="password" name="password" id="password" class="form-control border-start-0" placeholder="••••••••" value="MysteryMart2026!" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-mm-primary btn-lg w-100 mb-3" id="loginSubmitBtn">
+          Sign In to MysteryMart
+        </button>
+
+        <div class="text-center small text-muted">
+          Don't have an account yet? 
+          <a href="{{ url_for('auth.register') }}" class="fw-bold text-purple">Register here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

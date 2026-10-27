@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBEB" />
+      <stop offset="100%" stop-color="#FEF3C7" />
+    </linearGradient>
+    <linearGradient id="boxTop4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="boxLeft4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B45309" />
+      <stop offset="100%" stop-color="#92400E" />
+    </linearGradient>
+    <linearGradient id="boxRight4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78350F" />
+      <stop offset="100%" stop-color="#451A03" />
+    </linearGradient>
+    <filter id="shadow4" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#D97706" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="400" height="320" rx="20" fill="url(#bgGrad4)"/>
+  <circle cx="80" cy="70" r="45" fill="#FDE68A" opacity="0.6"/>
+  <circle cx="330" cy="250" r="50" fill="#DDD6FE" opacity="0.4"/>
+  <ellipse cx="200" cy="275" rx="110" ry="22" fill="#FCD34D" opacity="0.4"/>
+
+  <g filter="url(#shadow4)">
+    <polygon points="200,90 295,138 200,186 105,138" fill="url(#boxTop4)" stroke="#FDE68A" stroke-width="2"/>
+    <polygon points="105,138 200,186 200,265 105,217" fill="url(#boxLeft4)" />
+    <polygon points="295,138 200,186 200,265 295,217" fill="url(#boxRight4)" />
+    
+    <polygon points="188,96 212,84 212,180 188,192" fill="#7C3AED"/>
+    <polygon points="190,191 210,181 210,260 190,270" fill="#7C3AED"/>
+    <polygon points="105,172 200,220 200,232 105,184" fill="#6D28D9" opacity="0.9"/>
+  </g>
+
+  <g transform="translate(190, 70)">
+    <circle cx="10" cy="-10" r="28" fill="#FFFFFF" stroke="#D97706" stroke-width="3" filter="url(#shadow4)"/>
+    <text x="10" y="2" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="34" fill="#D97706" text-anchor="middle">👟</text>
+  </g>
+
+  <text x="200" y="300" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="14" fill="#92400E" text-anchor="middle" letter-spacing="1">FASHION MYSTERY BOX</text>
+</svg>
