@@ -2,19 +2,21 @@
 
 > An online shopping platform for curated surprise boxes inspired by Amazon & Flipkart. Customers select their category, pick a price tier, review guaranteed retail inclusions, and experience the thrill of the unexpected.
 
-[![Live Deployment Placeholder](https://img.shields.io/badge/Render-Live%20Demo-7C3AED?logo=render)](https://mysterymart.onrender.com)
+[![Live Deployment](https://img.shields.io/badge/Render-Live%20Demo-7C3AED?logo=render)](https://mysterymart1.onrender.com/)
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
 [![Flask Version](https://img.shields.io/badge/Flask-3.1.3-black?logo=flask)](https://flask.palletsprojects.com/)
 [![SQL Database](https://img.shields.io/badge/Database-SQLite%20%7C%20PostgreSQL-336791?logo=postgresql)](https://www.postgresql.org/)
 [![NoSQL Database](https://img.shields.io/badge/NoSQL-MongoDB%20Atlas-47A248?logo=mongodb)](https://www.mongodb.com/)
-[![Tests Passing](https://img.shields.io/badge/Tests-33%20Passed-success?logo=pytest)](https://pytest.org/)
+[![Tests Passing](https://img.shields.io/badge/Tests-34%20Passed-success?logo=pytest)](https://pytest.org/)
 
 ---
 
 ## 🌐 Live Website & Reference Deployment
 
 * **Reference Deployment (Visual & Deployment Standard):** [https://open-specimen.onrender.com/](https://open-specimen.onrender.com/)
-* **MysteryMart Live URL Placeholder:** `https://mysterymart.onrender.com` *(Replace with your actual Render deployment URL once deployed)*
+* **MysteryMart Render URL:** [https://mysterymart1.onrender.com/](https://mysterymart1.onrender.com/) *(Automatically redirects directly to the live shop below)*
+* **Direct Live Shop (Active Public URL):** [https://two-toes-shave.loca.lt/shop](https://two-toes-shave.loca.lt/shop)
+  *(Tunnel password if prompted on first visit: `171.79.53.12`)*
 
 ---
 

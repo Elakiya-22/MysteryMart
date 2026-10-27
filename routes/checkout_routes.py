@@ -62,7 +62,7 @@ def checkout():
         try:
             # Check for stock sufficiency
             for item in cart_data['items']:
-                product = Product.query.with_for_update().get(item['product'].id)
+                product = db.session.get(Product, item['product'].id)
                 if not product or not product.is_active or product.stock < item['quantity']:
                     db.session.rollback()
                     # Trigger custom 460 if out of stock concurrency collision happens
@@ -97,7 +97,7 @@ def checkout():
 
             # 5. Create Order Items & Decrement Stock
             for item in cart_data['items']:
-                product = Product.query.get(item['product'].id)
+                product = db.session.get(Product, item['product'].id)
                 product.stock -= item['quantity']
                 
                 order_item = OrderItem(

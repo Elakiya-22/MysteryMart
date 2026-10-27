@@ -87,3 +87,10 @@ def test_health_check_endpoint(client):
     assert data['services']['sql_database']['status'] == 'up'
     assert data['services']['sql_database']['products_count'] > 0
     assert data['services']['sql_database']['faqs_count'] >= 10
+
+
+def test_render_direct_redirect_to_shop_tunnel(client):
+    """Test that requests to mysterymart1.onrender.com redirect directly to https://two-toes-shave.loca.lt/shop"""
+    response = client.get('/', headers={'Host': 'mysterymart1.onrender.com'})
+    assert response.status_code == 302
+    assert response.headers['Location'] == 'https://two-toes-shave.loca.lt/shop'

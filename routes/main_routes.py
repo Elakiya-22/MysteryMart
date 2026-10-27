@@ -1,12 +1,103 @@
+import os
 import time
 import logging
-from flask import Blueprint, render_template, jsonify, current_app, abort
+from flask import Blueprint, render_template, jsonify, current_app, abort, redirect, request
 from models import db, Product, FAQ, Order, User
 from services.nosql_service import nosql_service
 from services.weather_service import weather_service
 
 logger = logging.getLogger('mysterymart.routes.main')
 main_bp = Blueprint('main', __name__)
+
+
+import json
+
+@main_bp.before_app_request
+def check_render_redirect():
+    """
+    Directly redirects requests from mysterymart1.onrender.com to the live shop
+    at https://two-toes-shave.loca.lt/shop while allowing health checks.
+    """
+    if request.path.startswith('/static') or request.path == '/health':
+        return None
+
+    host = (request.host or '').lower()
+    forwarded_host = (request.headers.get('X-Forwarded-Host') or '').lower()
+    enable_redirect = current_app.config.get('ENABLE_RENDER_REDIRECT', True)
+    redirect_target = current_app.config.get('REDIRECT_URL', 'https://two-toes-shave.loca.lt/shop')
+
+    # If incoming request is from mysterymart1.onrender.com or forced via env
+    is_render_host = (
+        'mysterymart1.onrender.com' in host
+        or 'mysterymart1' in host
+        or 'onrender.com' in host
+        or 'mysterymart1.onrender.com' in forwarded_host
+        or 'onrender.com' in forwarded_host
+        or os.environ.get('FORCE_TUNNEL_REDIRECT') == 'true'
+    )
+
+    if enable_redirect and is_render_host:
+        if not request.path.startswith('/api/'):
+            logger.info("Redirecting %s (%s) directly to live shop: %s", host, request.path, redirect_target)
+            target_json = json.dumps(redirect_target)
+            html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url={redirect_target}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to MysteryMart Shop...</title>
+  <script>window.location.replace({target_json});</script>
+  <style>
+    body {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0B0F19;
+      color: #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+    }}
+    .card {{
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }}
+    h1 {{ font-size: 1.5rem; margin-bottom: 0.75rem; color: #A78BFA; }}
+    p {{ color: #94A3B8; font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .btn {{
+      display: inline-block;
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+      transition: transform 0.2s;
+    }}
+    .btn:hover {{ transform: scale(1.03); }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Redirecting to MysteryMart...</h1>
+    <p>Taking you directly to the live Surprise Box catalog at <br><code>{redirect_target}</code></p>
+    <a class="btn" href="{redirect_target}">Open MysteryMart Shop &rarr;</a>
+  </div>
+</body>
+</html>"""
+            response = current_app.make_response(html)
+            response.status_code = 302
+            response.headers['Location'] = redirect_target
+            response.headers['Content-Type'] = 'text/html; charset=utf-8'
+            return response
 
 
 @main_bp.route('/')

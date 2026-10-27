@@ -54,6 +54,10 @@ class Config:
     RATE_LIMIT_LOGIN_MAX = 5  # attempts per minute
     RATE_LIMIT_CHAT_MAX = 30   # requests per minute
 
+    # Live Stream / Tunnel Direct Access Redirection
+    REDIRECT_URL = os.environ.get('REDIRECT_URL', 'https://two-toes-shave.loca.lt/shop')
+    ENABLE_RENDER_REDIRECT = os.environ.get('ENABLE_RENDER_REDIRECT', 'true').lower() in ('true', '1')
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""
