@@ -56,7 +56,7 @@ class Config:
 
     # Live Stream / Tunnel Direct Access Redirection
     REDIRECT_URL = os.environ.get('REDIRECT_URL', 'https://two-toes-shave.loca.lt/shop')
-    ENABLE_RENDER_REDIRECT = os.environ.get('ENABLE_RENDER_REDIRECT', 'true').lower() in ('true', '1')
+    ENABLE_RENDER_REDIRECT = os.environ.get('ENABLE_RENDER_REDIRECT', 'false').lower() in ('true', '1')
 
 
 class DevelopmentConfig(Config):

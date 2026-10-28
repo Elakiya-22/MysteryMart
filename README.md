@@ -14,9 +14,9 @@
 ## 🌐 Live Website & Reference Deployment
 
 * **Reference Deployment (Visual & Deployment Standard):** [https://open-specimen.onrender.com/](https://open-specimen.onrender.com/)
-* **MysteryMart Render URL:** [https://mysterymart1.onrender.com/](https://mysterymart1.onrender.com/) *(Automatically redirects directly to the live shop below)*
-* **Direct Live Shop (Active Public URL):** [https://two-toes-shave.loca.lt/shop](https://two-toes-shave.loca.lt/shop)
-  *(Tunnel password if prompted on first visit: `182.71.248.130`)*
+* **MysteryMart 24/7 Cloud URL (Public Access Anytime):** [https://mysterymart1.onrender.com/](https://mysterymart1.onrender.com/)
+* **Local Development Store (Instant Offline Access):** [http://localhost:5000/shop](http://localhost:5000/shop)
+* **Active Public Tunnel URL:** [https://two-toes-shave.loca.lt/shop](https://two-toes-shave.loca.lt/shop) *(Password: `182.71.248.130`)*
 
 ---
 
